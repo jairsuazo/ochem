@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>O-Chem Pulse</title>
+<style>
+:root{--bg:#fff3fa;--card:#fff;--ink:#3a2850;--mut:#85739a;--pink:#ff6fb0;--pd:#d4488a;--mint:#4fd1ae;--sun:#ffc54d;--lav:#9a8cff;--line:#f0dcf0;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#1c1430;--card:#2a1f44;--ink:#f7ebff;--mut:#b9a8d4;--line:#3e2f5e;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 ui-rounded,"SF Pro Rounded",Nunito,system-ui,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.wrap{max-width:720px;margin:auto;padding:14px}
+header{display:flex;align-items:center;gap:14px}
+.beaker{width:64px;flex:none;animation:wig 3s ease-in-out infinite;transform-origin:50% 90%}
+@keyframes wig{50%{transform:rotate(-4deg)}}
+.hd{flex:1;min-width:0}
+.say{background:var(--card);border:2px solid var(--line);border-radius:18px 18px 18px 4px;padding:8px 12px;font-weight:600}
+.stats{display:flex;gap:12px;margin-top:6px;font-size:14px;color:var(--mut);flex-wrap:wrap}
+.stats b{color:var(--ink)}
+.gear{border:0;background:none;font-size:22px;cursor:pointer}
+.card{background:var(--card);border:2px solid var(--line);box-shadow:0 6px 0 var(--line);border-radius:26px;padding:20px;margin-top:16px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:6px 14px;font:inherit;font-size:14px;cursor:pointer}
+.chip.on{background:var(--lav);border-color:var(--lav);color:#fff}
+.dots{display:flex;gap:8px;margin-bottom:14px}
+.dots i{height:10px;flex:1;border-radius:9px;background:var(--line)}
+.dots i.on{background:var(--mint)}.dots i.cur{background:var(--pink)}
+h2{margin:0 0 12px;font-size:22px;line-height:1.3}
+.btn{border:0;border-radius:16px;padding:13px 20px;font:inherit;font-weight:700;background:var(--pink);color:#fff;box-shadow:0 4px 0 var(--pd);cursor:pointer;margin-top:14px}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pd)}
+.btn.alt{background:var(--lav);box-shadow:0 4px 0 #6f60d8}
+.btn:disabled{opacity:.45}
+.opt{display:block;width:100%;text-align:left;margin-top:10px;padding:13px 16px;border-radius:16px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}
+.opt.ok{background:rgba(79,209,174,.25);border-color:var(--mint)}
+.opt.no{background:rgba(255,197,77,.25);border-color:var(--sun)}
+.note{margin-top:14px;padding:12px 14px;border-radius:16px;background:var(--bg);border-left:6px solid var(--lav)}
+textarea,input[type=text],input[type=password]{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:16px;padding:12px}
+textarea:focus,input:focus,button:focus-visible{outline:3px solid var(--lav);outline-offset:2px}
+.pad{display:block;width:100%;height:300px;background:#fff;border:2px dashed var(--lav);border-radius:18px;touch-action:none}
+.tools{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}
+.sw{width:34px;height:34px;border-radius:50%;border:3px solid var(--card);box-shadow:0 0 0 2px var(--line);cursor:pointer}
+.sw.on{box-shadow:0 0 0 3px var(--ink)}
+.ck{display:flex;gap:10px;align-items:flex-start;margin-top:8px}
+.ck input{width:22px;height:22px;accent-color:var(--mint);flex:none}
+.big{font-size:44px;font-weight:800;text-align:center;margin:4px 0}
+.bar{height:12px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:6px}
+.bar b{display:block;height:100%;background:linear-gradient(90deg,var(--pink),var(--sun),var(--mint));transition:width .7s}
+.cf{position:fixed;top:-30px;font-size:26px;pointer-events:none;animation:fall 1.9s ease-in forwards;z-index:9}
+@keyframes fall{to{transform:translateY(110vh) rotate(400deg);opacity:.5}}
+dialog{border:2px solid var(--line);border-radius:24px;background:var(--card);color:var(--ink);max-width:460px;width:92%}
+dialog label{display:block;margin-top:12px;font-weight:700;font-size:15px}
+small{color:var(--mut)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<div class="wrap">
+<header>
+ <svg class="beaker" viewBox="0 0 64 80" aria-label="Beaker the lab buddy">
+  <defs><clipPath id="cp"><path d="M18 8h28v20l12 40a8 8 0 0 1-8 10H14a8 8 0 0 1-8-10l12-40z"/></clipPath></defs>
+  <path d="M18 8h28v20l12 40a8 8 0 0 1-8 10H14a8 8 0 0 1-8-10l12-40z" fill="rgba(154,140,255,.18)" stroke="#9a8cff" stroke-width="3"/>
+  <g clip-path="url(#cp)"><rect id="fill" x="0" width="64" fill="#ff6fb0" opacity=".85" y="78" height="80" style="transition:y .8s"/></g>
+  <circle cx="25" cy="52" r="3.5" fill="#3a2850"/><circle cx="39" cy="52" r="3.5" fill="#3a2850"/>
+  <path d="M26 60q6 6 12 0" stroke="#3a2850" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+ </svg>
+ <div class="hd"><div class="say" id="say">Hi!</div>
+  <div class="stats"><span>Level <b id="lv">1</b></span><span>🔥 <b id="st">0</b> days</span><span>💎 <b id="gm">0</b></span><span id="stk" title="Sticker book"></span></div></div>
+ <button class="gear" id="gear" aria-label="Settings">⚙️</button>
+</header>
+<div class="chips" id="chips" aria-label="Pick a topic"></div>
+<section class="card" id="today"></section>
+<main class="card" id="main"></main>
+<dialog id="gd"></dialog>
+</div>
+<dialog id="dlg"><form method="dialog">
+ <h2>Settings</h2>
+ <label>Name<input type="text" id="nm"></label>
+ <label>Gemini API key (optional)<input type="password" id="ky" placeholder="AIza…"></label>
+ <small>With a key, Beaker also reads your drawing and leaves a note. Without one, you self-check against the rubric. Nothing is faked.</small>
+ <label>Cheering section (optional)<input type="text" id="hk" placeholder="Discord webhook URL"></label>
+ <label class="ck"><input type="checkbox" id="sh"> <span>Post my finished quests so Jair can cheer. Wins and scores only. Off by default and always my call.</span></label>
+ <button class="btn" id="sv">Save</button>
+</form></dialog>
+<script>
+const $=s=>document.querySelector(s),esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const Q=[
+{m:"Resonance",q:"Drawing resonance for the allyl cation, where does the curved-arrow tail start?",o:["On the + charge","On the adjacent π bond","On the carbon’s nucleus","On the empty p orbital"],a:1,e:"Arrows start where electrons are: π bonds or lone pairs. A + charge is an absence of electrons.",w:"Why can an arrow never start on a + charge?",k:"An arrow tracks a pair of electrons. A + marks an empty orbital, so there is nothing to push. Arrows start at bonds or lone pairs and end at electron-poor atoms.",d:"Draw both resonance forms of [CH2=CH–CH2]+ and the one arrow connecting them.",r:"Tail on the π bond, head on the C–C single bond."},
+{m:"Stereochem",q:"Which chair of trans-1-chloro-4-methylcyclohexane is most stable?",o:["Both axial","Both equatorial","Cl equatorial, CH3 axial","Cl axial, CH3 equatorial"],a:1,e:"A trans-1,4 pair can be both equatorial (or both axial). Diequatorial avoids 1,3-diaxial strain.",w:"Where does 1,3-diaxial strain come from?",k:"An axial group on C1 sits close to the axial H’s on C3 and C5 on the same face, so van der Waals repulsion raises the energy. Equatorial groups point away from the ring.",d:"Draw (2R,3R)-tartaric acid in wedge-and-dash form.",r:"At C2 the CIP priorities are OH > COOH > CH(OH)COOH > H, with H on a dash when it points back."},
+{m:"SN2 / E2",q:"Which halide can never do SN2?",o:["1-bromobutane","2-bromobutane","2-bromo-2-methylpropane","Bromomethane"],a:2,e:"A tertiary carbon blocks backside attack on the C–Br σ* orbital.",w:"Why does SN2 need a backside attack, and what does that do to stereochemistry?",k:"The nucleophile donates into the C–LG σ* orbital, whose big lobe is 180° from the leaving group. That forces inversion, like an umbrella flipping in the wind.",d:"Draw HO⁻ attacking bromomethane, with the transition state.",r:"One arrow from the O lone pair to C, one from the C–Br bond to Br."},
+{m:"SN2 / E2",q:"(2R)-2-bromobutane + NaCN in DMSO. Major product?",o:["Racemic 2-methylbutanenitrile","(2S)-2-methylbutanenitrile","(2R)-2-methylbutanenitrile","2-butene"],a:1,e:"CN⁻ is a strong, unhindered nucleophile and a weak base, and DMSO speeds up SN2. Inversion turns 2R into 2S.",w:"How do the products differ for NaOMe/MeOH versus t-BuOK/t-BuOH on the same bromide?",k:"NaOMe gives mostly the Zaitsev alkene, 2-butene, plus some SN2 ether. Bulky t-BuOK can’t reach the internal H, so it takes the terminal H and gives the Hofmann alkene, 1-butene.",d:"Draw the SN2 step and show the stereocenter flipping with wedges and dashes.",r:"Nucleophile enters opposite the leaving group; the other three groups flip."},
+{m:"SN1 / E1",q:"2-bromo-3,3-dimethylbutane is heated in water. Major substitution product?",o:["3,3-dimethyl-2-butanol","2,3-dimethyl-2-butanol","3,3-dimethyl-1-butene","2,3-dimethyl-1-butene"],a:1,e:"The 2° cation forms, a 1,2-methyl shift gives the 3° cation, and water traps it.",w:"Why do carbocations rearrange so readily in SN1/E1?",k:"A neighboring group’s bonding orbital overlaps the empty p orbital, so the barrier is tiny. Going from 2° to 3° is a big stability gain, so the shift often beats capture by solvent.",d:"Draw solvolysis of 2-chloro-3-methylbutane in MeOH, including the hydride shift.",r:"Lose Cl⁻, 1,2-H shift to 3°, MeOH attacks, deprotonate."},
+{m:"Alkenes",q:"1-methylcyclopentene + BH3·THF, then H2O2/NaOH. Major product?",o:["trans-2-methylcyclopentanol","1-methylcyclopentanol","cis-2-methylcyclopentanol","A 1,2-diol"],a:0,e:"Anti-Markovnikov OH, syn addition of H and OH. That leaves the OH trans to the methyl.",w:"Why does Br2 add anti across a double bond?",k:"A cyclic bromonium ion blocks one face. Br⁻ must attack the opposite face from behind, so the two Br atoms end up anti.",d:"Draw propene + HBr with arrows for both steps.",r:"π bond attacks H⁺ to make the 2° cation, then Br⁻ attacks it."},
+{c:3,m:"Acids/bases",q:"Why is acetic acid (pKa ≈ 4.8) far more acidic than ethanol (pKa ≈ 16)?",o:["Resonance spreads the carboxylate charge over two oxygens","Ethanol’s O–H bond is stronger","Acetic acid is a bigger molecule","Ethoxide is the more stable base"],a:0,e:"Compare conjugate bases. Acetate delocalizes its negative charge; ethoxide keeps it on one oxygen.",w:"Why is HI a stronger acid than HF even though F is more electronegative?",k:"Atom size wins down a column. Iodide spreads its charge over a much larger volume, so I⁻ is the more stable base. Across a row, electronegativity wins instead.",d:"Draw both resonance forms of acetate with the curved arrow.",r:"Arrow from the O⁻ lone pair into a new C=O; the old C=O π bond moves onto the other O."},
+{c:5,m:"Stereochem",q:"(2R,3S)-2,3-dibromobutane is related to its mirror image how?",o:["Identical: it is meso","Enantiomers","Diastereomers","Constitutional isomers"],a:0,e:"An internal mirror plane through the C2–C3 bond makes it achiral despite two stereocenters.",w:"How can a molecule have stereocenters and still be achiral?",k:"An internal mirror plane makes one half the reflection of the other, so the two centers cancel and the compound does not rotate light.",d:"Draw meso-2,3-dibromobutane as a Fischer projection and mark the mirror plane.",r:"Both Br on the same side; mirror line between C2 and C3."},
+{c:6,m:"Reactivity",q:"A reaction has ΔG° < 0 but barely runs at room temperature. Why?",o:["A large activation barrier makes it slow","ΔG° is wrong","It is at equilibrium","Entropy is zero"],a:0,e:"ΔG° says where equilibrium lies; ΔG‡ sets the speed.",w:"What is the difference between thermodynamic and kinetic control, and what does the Hammond postulate add?",k:"Thermodynamics asks which species is lower in energy; kinetics asks which path has the lower barrier. The Hammond postulate says a transition state resembles the species nearest it in energy.",d:"Sketch an energy diagram for a two-step reaction with one intermediate and label ΔG‡ for the slow step.",r:"Two peaks and one valley; the rate-determining step has the taller peak."},
+{c:9,m:"Alkynes",q:"1-butyne + H2O, H2SO4, HgSO4 gives which major product?",o:["Butanal","2-butanone","1-butanol","Butanoic acid"],a:1,e:"Markovnikov hydration puts OH on the internal carbon; the enol tautomerizes to a ketone.",w:"Why does hydroboration–oxidation of a terminal alkyne give an aldehyde instead?",k:"Boron adds to the less hindered terminal carbon (anti-Markovnikov). Oxidation gives an enol that tautomerizes to the aldehyde.",d:"Draw the acid-catalyzed keto–enol tautomerization of CH2=C(OH)CH2CH3 with arrows.",r:"π bond takes H⁺ at the CH2 carbon; water removes the O–H proton to form C=O."},
+{c:10,m:"Radicals",q:"Which gives the most selective radical halogenation of 2-methylbutane?",o:["Cl2, because it is more reactive","Br2, because its H-abstraction has a late transition state","Both are equally selective","I2"],a:1,e:"Br• abstraction is endothermic, so the transition state looks like the product radical and strongly favors 3°.",w:"Explain why radical bromination of 2-methylbutane gives mostly the 3° bromide.",k:"A late transition state resembles the radical it forms, so the most stable (3°) radical pathway is fastest. Cl• is exothermic with an early transition state and is much less selective.",d:"Draw both propagation steps for bromination at the 3° carbon with fishhook arrows.",r:"Br• removes the 3° H; the 3° radical takes Br from Br2 and regenerates Br•."},
+{c:12,m:"Alcohols",q:"Which reagent oxidizes a primary alcohol to an aldehyde and stops?",o:["PCC in CH2Cl2","H2CrO4 (Jones)","KMnO4, heat","NaBH4"],a:0,e:"With no water present there is no aldehyde hydrate to oxidize further. Jones conditions go on to the acid.",w:"Why can’t –OH be displaced directly, and what do SOCl2 and PBr3 change?",k:"OH⁻ is a poor leaving group. SOCl2 or PBr3 convert it into a good one, then halide attacks by SN2 with inversion at a stereocenter.",d:"Draw SOCl2/pyridine converting a secondary alcohol to the alkyl chloride.",r:"O attacks S and Cl⁻ leaves; pyridine removes H⁺; Cl⁻ then attacks from the back as SO2 leaves."},
+{c:13,m:"Epoxides",q:"Methyloxirane + NaOCH3 in CH3OH. Where does the nucleophile attack?",o:["The less substituted carbon","The more substituted carbon","Both equally","The oxygen"],a:0,e:"A strong nucleophile does SN2 at the less hindered carbon; ring strain drives the opening.",w:"How does the regiochemistry flip under acidic conditions (H3O⁺, MeOH)?",k:"Protonating O weakens the C–O bonds and builds partial positive charge on the more substituted carbon, so the weak nucleophile attacks there: SN2-like geometry, SN1-like regiochemistry.",d:"Draw base-mediated opening of methyloxirane by CH3O⁻, including the final protonation.",r:"Alkoxide attacks CH2, the C–O bond breaks onto O⁻, then proton transfer gives the alcohol."}
+];
+Q.forEach((q,i)=>{if(q.c==null)q.c=[2,4,7,7,7,8][i]});
+const CH=[
+{n:1,t:"Introduction and general chemistry review",d:"Aug 25–27",x:"Exam 1",r:["Draw Lewis structures with correct formal charges","Connect hybridization (sp, sp², sp³) to geometry and bond angles","Use electronegativity to predict bond polarity"]},
+{n:2,t:"Molecular representation",d:"Sep 1–2",x:"Exam 1",r:["Read and draw skeletal structures, filling in implied C and H","Draw resonance arrows from lone pairs or π bonds only","Rank contributors: full octets first, then fewer charges"]},
+{n:4,t:"Alkanes and cycloalkanes",d:"Sep 8–10",x:"Exam 1",r:["Name alkanes and cycloalkanes by IUPAC rules","Draw Newman projections and rank conformers by strain","Draw chairs, flip them, and put bulky groups equatorial"]},
+{n:5,t:"Stereochemistry",d:"Sep 15–17",x:"Exam 1",r:["Assign R/S with CIP priorities","Tell enantiomers, diastereomers and meso compounds apart","Convert between Fischer projections and wedge–dash"]},
+{n:3,t:"Acids and bases",d:"Sep 22–29",x:"Exam 2",r:["Rank conjugate bases with ARIO: Atom, Resonance, Induction, Orbital","Use pKa values to say which side an equilibrium favors","Draw proton transfers with two arrows"]},
+{n:6,t:"Introduction to reactivity",d:"Oct 1",x:"Exam 2",r:["Recognize the core arrow-pushing patterns","Read energy diagrams: ΔG°, ΔG‡, intermediates, rate-determining step","Apply the Hammond postulate and carbocation stability"]},
+{n:7,t:"Nucleophilic substitution and elimination",d:"Oct 6–15",x:"Exam 2",r:["Choose SN1, SN2, E1 or E2 from substrate, nucleophile/base, solvent and heat","Predict stereochemistry: inversion (SN2), racemization (SN1), anti-periplanar (E2)","Spot carbocation rearrangements and Zaitsev versus Hofmann"]},
+{n:8,t:"Addition reactions of alkenes",d:"Oct 20–29",x:"Exam 3",r:["Know each addition’s regiochemistry (Markovnikov or not) and stereochemistry (syn or anti)","Draw full mechanisms for HX, acid-catalyzed hydration and halogenation","Keep a reagent table: hydroboration, oxymercuration, epoxidation, dihydroxylation, ozonolysis"]},
+{n:9,t:"Alkynes",d:"Nov 3–10",x:"Exam 3",r:["Add HX, H2O and borane to alkynes and track the enol→carbonyl tautomerization","Reduce alkynes: Lindlar (cis), Na/NH3 (trans), H2/Pd (alkane)","Alkylate terminal alkynes with NaNH2 then an alkyl halide"]},
+{n:10,t:"Radical reactions",d:"Nov 12",x:"Exam 3",r:["Draw initiation, propagation and termination with fishhook arrows","Explain why Br• is selective and Cl• is not","Predict allylic bromination with NBS"]},
+{n:12,t:"Alcohols",d:"Dec 1–3",x:"Final",r:["Convert alcohols to halides and sulfonates (SOCl2, PBr3, TsCl)","Pick the right oxidant: PCC/DMP versus chromic acid","Compare alcohol acidity and when a strong base like NaH is needed"]},
+{n:13,t:"Ethers and epoxides",d:"Dec 8–10",x:"Final",r:["Make epoxides and ethers (Williamson, mCPBA)","Predict epoxide opening regiochemistry under basic versus acidic conditions","Cleave ethers with HBr or HI"]}
+],EX=[{n:1,d:"2026-09-24",ch:[1,2,4,5]},{n:2,d:"2026-10-22",ch:[3,6,7]},{n:3,d:"2026-11-19",ch:[8,9,10]},{n:"Final",d:null,ch:[1,2,3,4,5,6,7,8,9,10,12,13]}],DAY=864e5,today=()=>new Date(new Date().toDateString()),nextExam=()=>EX.find(e=>e.d&&new Date(e.d+"T00:00")>=today())||EX[3];
+const PRAISE=["Boom, nailed it!","Look at you go!","Brain cells: activated.","Beaker is doing a happy bubble dance.","That one was sneaky and you got it."],
+OOPS=["Plot twist! Check the why below.","Ooh, tricky one. Even TAs trip on this.","Not yet, and now you know the trap.","Good guess. Here’s the missing piece."],
+STK=["🧪","⚗️","🧬","🔬","🌈","🦄","🍄","🪐","🫧","🍓","🐙","🌸"],pick=a=>a[Math.floor(Math.random()*a.length)];
+let S={xp:0,gems:0,mast:{},streak:0,last:"",shield:1,name:"Avion",key:"",hook:"",share:false,stk:[]};
+try{Object.assign(S,JSON.parse(localStorage.getItem("ocp3")||"{}"))}catch(e){}
+S.read=S.read||{};S.box=S.box||{};S.due=S.due||{};S.tg=S.tg||{d:"",n:0};S.gr=S.gr||{};
+const save=()=>{try{localStorage.setItem("ocp3",JSON.stringify(S))}catch(e){}};
+let R={i:-1,s:0,focus:"All",seen:[]},ink=false,pen="#5b3fd1",snaps=[],penSeen=false;
+function say(t){$("#say").textContent=t}
+function hud(){$("#lv").textContent=Math.floor(S.xp/100)+1;$("#st").textContent=S.streak;$("#gm").textContent=S.gems;$("#stk").textContent=S.stk.join("");$("#fill").setAttribute("y",78-(S.xp%100)/100*58)}
+function chips(){const ne=nextExam();$("#chips").innerHTML=`<button class="chip ${R.fc?"":"on"}" data-c="0">📅 ${ne.n=="Final"?"Final":"Exam "+ne.n} focus</button>`+CH.map(c=>`<button class="chip ${R.fc==c.n?"on":""}" data-c="${c.n}">Ch ${c.n}</button>`).join("")}
+$("#chips").onclick=e=>{const c=e.target.dataset.c;if(c==null)return;R.fc=+c;chips();R.fc?gate(R.fc):next()};
+function pool(){const set=R.fc?[R.fc]:nextExam().ch;let ix=Q.map((q,i)=>i).filter(i=>set.includes(Q[i].c));if(!ix.length)ix=Q.map((q,i)=>i);if(ix.length>1)ix=ix.filter(i=>i!=R.i);const d=ix.filter(i=>(S.due[i]||0)<=Date.now());return(d.length?d:ix).sort((a,b)=>(S.box[a]||0)-(S.box[b]||0)||Math.random()-.5)}
+function next(){R.i=pool()[0];R.s=0;R.p=null;R.wr=null;R.ai=null;ink=false;snaps=[];say(R.seen.length?"Next one, you’re warmed up!":"Hi "+S.name+"! Pick a chapter or just start.");render()}
+function gate(n){const c=CH.find(x=>x.n==n),a=S.read[n]||[],m=$("#main");say("Quick pre-flight, then we drill.");m.innerHTML=`<h2>Ch ${c.n}: ${esc(c.t)}</h2><small>${esc(c.d)} · ${c.x} · Klein 5th ed.</small>`+c.r.map((t,i)=>`<label class="ck"><input type="checkbox" data-i="${i}" ${a[i]?"checked":""}><span>${esc(t)}</span></label>`).join("")+(Q.some(q=>q.c==n)?"":`<div class="note">No drills for this chapter yet, so Beaker will mix in other chapters.</div>`)+`<button class="btn" id="go">Start drills</button>`;m.querySelectorAll("input").forEach(k=>k.onchange=()=>{const v=S.read[n]||[];v[+k.dataset.i]=k.checked;S.read[n]=v;save()});$("#go").onclick=next}
+function todayCard(){const ne=nextExam(),dl=ne.d?Math.ceil((new Date(ne.d+"T00:00")-today())/DAY):null,tg=S.tg.d==new Date().toDateString()?S.tg.n:0,due=Q.filter((q,i)=>S.box[i]!=null&&(S.due[i]||0)<=Date.now()).length;
+ $("#today").innerHTML=`<div class="row"><b>${ne.d?`Exam ${ne.n}: ${dl?`${dl} days`:"today"} (${ne.d.slice(5)})`:"Final exam (cumulative), date TBD"}</b><button class="chip" id="gb">Grade math</button></div><small>${ne.n=="Final"?"Everything, with Ch 12–13 new":"Covers Ch "+ne.ch.join(", ")} · exams are hand-drawn, 2 note sheets · quizzes are unannounced</small><div class="bar"><b style="width:${Math.min(100,tg/3*100)}%"></b></div><small>Today’s goal: ${tg}/3 quests · ${due} review${due==1?"":"s"} due</small>`;$("#gb").onclick=grade}
+function grade(){const f=[["hw","Homework pts expected (of 50)"],["qz","Quiz pts expected (of 50)"],["e1","Exam 1 %"],["e2","Exam 2 %"],["e3","Exam 3 % (expected)"]],g=S.gr,d=$("#gd");
+ d.innerHTML=`<form method="dialog"><h2>Grade math</h2><small>Final replaces your lowest exam % if it’s higher. 90% = 450 of 500 pts.</small>`+f.map(([k,l])=>`<label>${l}<input type="text" inputmode="decimal" data-k="${k}" value="${esc(g[k]??"")}"></label>`).join("")+`<div class="note" id="gout"></div><button class="btn">Close</button></form>`;
+ const v=k=>+g[k]||0,tot=x=>{const m=[v("e1"),v("e2"),v("e3")],lo=Math.min(...m);if(x>lo)m[m.indexOf(lo)]=x;return v("hw")+v("qz")+m.reduce((a,b)=>a+b,0)+x},
+ calc=()=>{let n=null;for(let x=0;x<=100;x+=.5)if(tot(x)>=450){n=x;break}$("#gout").textContent=n==null?`Best case with a 100 on the final: ${(tot(100)/5).toFixed(1)}%. 90% is out of reach on these numbers, so aim for the best letter you can.`:`You’d need about ${n}% on the final for 90%.`};
+ d.querySelectorAll("input").forEach(i=>i.oninput=()=>{S.gr[i.dataset.k]=i.value;save();calc()});calc();d.showModal()}
+function render(){const q=Q[R.i],m=$("#main");
+ const dots=[0,1,2].map(n=>`<i class="${n<R.s?"on":n==R.s?"cur":""}"></i>`).join("");
+ if(R.s==0){m.innerHTML=`<div class="dots">${dots}</div><small>${esc(q.m)} · 3 quick steps</small><h2>${esc(q.q)}</h2>`+q.o.map((o,n)=>`<button class="opt" data-n="${n}">${esc(o)}</button>`).join("")+`<div id="fb"></div>`;
+  m.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(R.p!=null)return;R.p=+b.dataset.n;const ok=R.p==q.a;m.querySelectorAll(".opt").forEach((x,n)=>{if(n==q.a)x.classList.add("ok");else if(n==R.p)x.classList.add("no")});say(ok?pick(PRAISE):pick(OOPS));if(ok)boom(10);$("#fb").innerHTML=`<div class="note">${esc(q.e)}</div><button class="btn" id="go">Next step</button>`;$("#go").onclick=()=>{R.s=1;render()}})}
+ else if(R.s==1){m.innerHTML=`<div class="dots">${dots}</div><h2>${esc(q.w)}</h2><textarea id="why" rows="4" placeholder="Rough thoughts count. Two sentences is plenty."></textarea><button class="btn alt" id="rv">Show me the pro answer</button><div id="ans"></div>`;
+  $("#rv").onclick=()=>{$("#rv").remove();$("#ans").innerHTML=`<div class="note"><b>Pro answer:</b> ${esc(q.k)}</div><p>How close was yours?</p><div class="chips"><button class="chip" data-r="0">Not close</button><button class="chip" data-r="60">Partly</button><button class="chip" data-r="100">Basically that</button></div><button class="btn" id="go" disabled>Next step</button>`;
+   $("#ans").querySelectorAll("[data-r]").forEach(c=>c.onclick=()=>{R.wr=+c.dataset.r;$("#ans").querySelectorAll("[data-r]").forEach(x=>x.classList.remove("on"));c.classList.add("on");$("#go").disabled=false});
+   $("#go").onclick=()=>{R.why=$("#why").value;R.s=2;render()}}}
+ else if(R.s==2){m.innerHTML=`<div class="dots">${dots}</div><h2>${esc(q.d)}</h2><canvas class="pad" id="pad"></canvas><div class="tools"><span class="sw on" data-c="#5b3fd1" style="background:#5b3fd1"></span><span class="sw" data-c="#d4488a" style="background:#d4488a"></span><span class="sw" data-c="#0e9f84" style="background:#0e9f84"></span><button class="chip" id="er">Eraser</button><button class="chip" id="un">Undo</button><button class="chip" id="cl">Clear</button><label class="chip">📷 Photo<input type="file" id="ph" accept="image/*" hidden></label></div>
+  <p><b>Self-check</b> (tick what’s true)</p><label class="ck"><input type="checkbox" class="rb"><span>${esc(q.r)}</span></label><label class="ck"><input type="checkbox" class="rb"><span>Every arrow starts on a lone pair or a bond, never on a + or an atom label.</span></label><label class="ck"><input type="checkbox" class="rb"><span>Charges and wedges/dashes are shown where they matter.</span></label><button class="btn" id="fin">Finish quest</button>`;pad()}
+ else{res()}}
+function pad(){const c=$("#pad"),x=c.getContext("2d"),d=devicePixelRatio||1;c.width=c.clientWidth*d;c.height=300*d;x.scale(d,d);x.lineCap=x.lineJoin="round";let on=false,er=false;
+ const pos=e=>{const r=c.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]};
+ const snap=()=>{if(snaps.length>12)snaps.shift();snaps.push(c.toDataURL())};
+ const put=u=>{const i=new Image();i.onload=()=>{x.save();x.setTransform(1,0,0,1,0,0);x.globalCompositeOperation="source-over";x.clearRect(0,0,c.width,c.height);x.drawImage(i,0,0);x.restore()};i.src=u};
+ c.onpointerdown=e=>{if(e.pointerType=="pen")penSeen=true;if(e.pointerType=="touch"&&penSeen)return;e.preventDefault();c.setPointerCapture(e.pointerId);on=true;ink=true;snap();const[a,b]=pos(e);x.beginPath();x.moveTo(a,b);x.globalCompositeOperation=er?"destination-out":"source-over";x.strokeStyle=pen;x.lineWidth=er?24:3}
+ c.onpointermove=e=>{if(!on)return;(e.getCoalescedEvents?e.getCoalescedEvents():[e]).forEach(p=>{const[a,b]=pos(p);x.lineTo(a,b);x.stroke()})};
+ c.onpointerup=c.onpointercancel=()=>{on=false};
+ document.querySelectorAll(".sw").forEach(s=>s.onclick=()=>{er=false;pen=s.dataset.c;document.querySelectorAll(".sw").forEach(z=>z.classList.remove("on"));s.classList.add("on")});
+ $("#er").onclick=()=>{er=!er};$("#un").onclick=()=>{if(snaps.length)put(snaps.pop())};$("#cl").onclick=()=>{snap();x.save();x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,c.width,c.height);x.restore();ink=false};
+ $("#ph").onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{const i=new Image();i.onload=()=>{snap();const w=c.clientWidth,s=Math.min(w/i.width,300/i.height,1);x.globalCompositeOperation="source-over";x.drawImage(i,(w-i.width*s)/2,(300-i.height*s)/2,i.width*s,i.height*s);ink=true};i.src=rd.result};rd.readAsDataURL(f)};
+ $("#fin").onclick=fin}
+async function ai(q,why,img){const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":S.key},body:JSON.stringify({systemInstruction:{parts:[{text:"You are a kind organic chemistry TA. Check curved arrows (tails on lone pairs or bonds, heads on atoms), formal charges and stereochemistry in the image. Be specific and encouraging, under 60 words. Reply JSON only: {\"drawScore\":0-100,\"note\":\"...\"}"}]},contents:[{role:"user",parts:[{text:`Task: ${q.d}\nRule: ${q.r}\nWritten answer: ${why||"(none)"}`},{inlineData:{mimeType:"image/jpeg",data:img.split(",")[1]}}]}],generationConfig:{responseMimeType:"application/json"}})});
+ if(!r.ok)throw 0;const j=JSON.parse((await r.json()).candidates[0].content.parts[0].text),s=Math.round(+j.drawScore);return{score:isFinite(s)?Math.max(0,Math.min(100,s)):null,note:String(j.note||"")}}
+async function fin(){const q=Q[R.i],c=$("#pad");const b=$("#fin");const checks=[...document.querySelectorAll(".rb")];let ds=Math.round(checks.filter(k=>k.checked).length/checks.length*100);
+ if(!ink&&!checks.some(k=>k.checked)){say("Sketch something, even a messy first try!");return}
+ b.disabled=true;b.textContent="Beaker is looking…";R.ai=null;
+ if(S.key&&ink){try{const t=document.createElement("canvas");t.width=c.width;t.height=c.height;const g=t.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,t.width,t.height);g.drawImage(c,0,0);R.img=t.toDataURL("image/jpeg",.85);const a=await ai(q,R.why,R.img);R.ai=a.note;if(a.score!=null)ds=a.score}catch(e){R.ai="Beaker couldn’t reach the AI coach, so this score is from your self-check."}}
+ const mc=R.p==q.a?100:0,sc=Math.round(mc*.2+R.wr*.3+ds*.5),xp=20+Math.round(sc/4);
+ const old=S.mast[q.m]??sc;S.mast[q.m]=Math.round(old*.6+sc*.4);S.xp+=xp;R.sc=sc;R.xp=xp;R.parts=[mc,R.wr,ds];R.gem=Math.random()<.4;
+ if(R.gem){S.gems++;const f=STK.filter(s=>!S.stk.includes(s));if(f.length){R.sticker=pick(f);S.stk.push(R.sticker)}else R.sticker=null}else R.sticker=null;
+ const t=new Date().toDateString();if(S.last!=t){const gap=S.last?Math.round((new Date(t)-new Date(S.last))/864e5):0;if(!S.last)S.streak=1;else if(gap==1)S.streak++;else if(gap==2&&S.shield>0){S.shield--;S.streak++;R.shield=true}else{S.streak=1;R.fresh=true}S.last=t}
+ const bx=sc>=70?Math.min(4,(S.box[R.i]||0)+1):0;S.box[R.i]=bx;S.due[R.i]=Date.now()+[0,1,3,7,14][bx]*DAY;const dt=new Date().toDateString();S.tg=S.tg.d==dt?{d:dt,n:S.tg.n+1}:{d:dt,n:1};R.seen.push(R.i);save();todayCard();
+ if(S.share&&/^https:\/\//.test(S.hook))fetch(S.hook,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({content:`🎉 ${S.name} finished a ${q.m} quest: ${sc}%`,allowed_mentions:{parse:[]}})}).catch(()=>{});
+ R.s=3;render();boom(26)}
+function res(){const q=Q[R.i],m=$("#main"),n=R.parts;hud();
+ say(R.sc>=85?"Mastered! Beaker is overflowing!":R.sc>=60?"Solid work. You’re closer than you think.":"Finished counts. Every attempt fills the beaker.");
+ m.innerHTML=`<div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></div><div class="big">+${R.xp} XP</div><p style="text-align:center;margin:0">Quest score ${R.sc}% · ${esc(q.m)} mastery ${S.mast[q.m]}%</p><div class="bar"><b style="width:${S.mast[q.m]}%"></b></div>
+ ${R.gem?`<div class="note">💎 Bonus gem!${R.sticker?` New sticker: ${R.sticker}`:""}</div>`:""}
+ ${R.shield?`<div class="note">A streak shield covered your missed day. Streak saved.</div>`:""}${R.fresh?`<div class="note">Fresh start today. Day 1 is still a win.</div>`:""}
+ ${S.tg.n==3?`<div class="note">Daily goal hit! Anything more is bonus.</div>`:""}
+ ${R.ai?`<div class="note"><b>Beaker’s note on your drawing:</b> ${esc(R.ai)}</div>`:""}
+ <div class="note">Steps: choice ${n[0]}% · why ${n[1]}% · drawing ${n[2]}%. ${S.key?"":"Drawing score is your self-check."}</div>
+ <button class="btn" id="nx">Another quest</button> <button class="btn alt" id="br">2-minute break</button>`;R.shield=R.fresh=false;
+ $("#nx").onclick=next;$("#br").onclick=()=>{say("Stretch, water, wiggle. I’ll hold your spot.");m.innerHTML=`<div class="big">☕</div><p style="text-align:center">Back whenever you’re ready.</p><button class="btn" id="nx2">I’m back</button>`;$("#nx2").onclick=next}}
+function boom(n){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;for(let i=0;i<n;i++){const s=document.createElement("span");s.className="cf";s.textContent=pick(["✨","🧪","💖","🫧","⭐"]);s.style.left=Math.random()*100+"vw";s.style.animationDelay=Math.random()*.5+"s";document.body.appendChild(s);setTimeout(()=>s.remove(),2600)}}
+$("#gear").onclick=()=>{$("#nm").value=S.name;$("#ky").value=S.key;$("#hk").value=S.hook;$("#sh").checked=S.share;$("#dlg").showModal()};
+$("#sv").onclick=()=>{S.name=$("#nm").value.trim()||"Avion";S.key=$("#ky").value.trim();S.hook=$("#hk").value.trim();S.share=$("#sh").checked;save()};
+chips();hud();todayCard();next();
+</script></body></html>
